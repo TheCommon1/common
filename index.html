@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$COMMON — This Belongs To All Of Us</title>
+<meta name="description" content="The system wasn't broken by accident. It was designed this way. And the people it was designed against just figured out how to use the same tools.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0C0B09;
+    --warm-white: #F5F0E8;
+    --cream: #EDE6D6;
+    --gold: #C8A951;
+    --gold-dim: #8A6F2E;
+    --gold-bright: #E8C96A;
+    --text-muted: #8A8070;
+    --border: rgba(200, 169, 81, 0.2);
+    --hex: #C8A951;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--black);
+    color: var(--warm-white);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Honeycomb background pattern */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 50% 50%, rgba(200,169,81,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hex-grid {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    opacity: 0.06;
+    pointer-events: none;
+    overflow: hidden;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    color: var(--gold);
+    line-height: 1.2;
+    letter-spacing: 2px;
+    padding: 20px;
+    word-break: break-all;
+    align-content: center;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    animation: fadeUp 1.2s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero-symbol {
+    font-size: clamp(60px, 12vw, 120px);
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s forwards;
+    filter: drop-shadow(0 0 40px rgba(200,169,81,0.3));
+  }
+
+  .hero-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(42px, 8vw, 96px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--warm-white);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.7s forwards;
+  }
+
+  .hero-headline em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: var(--cream);
+    font-weight: 300;
+    font-style: italic;
+    max-width: 560px;
+    margin: 0 auto 56px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+    line-height: 1.7;
+  }
+
+  .hero-scroll {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.3s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ── DIVIDER ── */
+  .hex-divider {
+    text-align: center;
+    padding: 32px 0;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 8px;
+    opacity: 0.4;
+    font-family: 'IBM Plex Mono', monospace;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:last-of-type {
+    border-bottom: none;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── THE INDICTMENT ── */
+  .indictment {
+    background: rgba(200, 169, 81, 0.04);
+    border-left: 3px solid var(--gold);
+    padding: 48px 40px;
+    border-radius: 0 4px 4px 0;
+    margin: 0 auto;
+  }
+
+  .indictment-line {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--warm-white);
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .indictment-line.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .indictment-line span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .indictment-line:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── MANIFESTO ── */
+  .manifesto p {
+    font-size: clamp(17px, 2.2vw, 21px);
+    color: var(--cream);
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .manifesto p.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .manifesto p strong {
+    color: var(--warm-white);
+    font-weight: 600;
+  }
+
+  .manifesto p em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .pull-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--warm-white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0;
+    margin: 56px 0;
+    line-height: 1.4;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  .pull-quote.visible {
+    opacity: 1;
+  }
+
+  .pull-quote em {
+    color: var(--gold);
+  }
+
+  /* ── FOR SECTION ── */
+  .for-grid {
+    display: grid;
+    gap: 0;
+  }
+
+  .for-item {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: start;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .for-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .for-item:last-child {
+    border-bottom: none;
+  }
+
+  .for-hex {
+    color: var(--gold);
+    font-size: 18px;
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .for-text {
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--cream);
+    line-height: 1.7;
+  }
+
+  .for-text strong {
+    color: var(--warm-white);
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 2.2vw, 22px);
+  }
+
+  /* ── THE RECORD / LORE ── */
+  .record-list {
+    list-style: none;
+  }
+
+  .record-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .record-item.visible {
+    opacity: 1;
+  }
+
+  .record-item:last-child {
+    border-bottom: none;
+  }
+
+  .record-timestamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    padding-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .record-text {
+    font-size: clamp(15px, 1.8vw, 18px);
+    color: var(--cream);
+    line-height: 1.8;
+  }
+
+  .record-text em {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ── FAQ ── */
+  .faq-list {
+    list-style: none;
+  }
+
+  .faq-item {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+
+  .faq-item.visible {
+    opacity: 1;
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .faq-q {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(17px, 2.2vw, 21px);
+    font-weight: 700;
+    color: var(--warm-white);
+    margin-bottom: 12px;
+  }
+
+  .faq-a {
+    font-size: clamp(15px, 1.8vw, 18px);
+    color: var(--cream);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .faq-a strong {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* ── SIGNAL LOG ── */
+  .signal-log {
+    display: grid;
+    gap: 20px;
+  }
+
+  .signal-entry {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    font-size: clamp(14px, 1.7vw, 17px);
+    color: var(--cream);
+    font-style: italic;
+    line-height: 1.8;
+    position: relative;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .signal-entry.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .signal-entry::before {
+    content: '⬡';
+    position: absolute;
+    top: -12px;
+    left: 32px;
+    background: var(--black);
+    padding: 0 8px;
+    color: var(--gold);
+    font-size: 16px;
+  }
+
+  .signal-anon {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: normal;
+    letter-spacing: 0.15em;
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+
+  /* ── CTA / CONTRACT ── */
+  .cta-section {
+    text-align: center;
+    padding: 100px 32px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .cta-symbol {
+    font-size: 64px;
+    color: var(--gold);
+    margin-bottom: 40px;
+    filter: drop-shadow(0 0 30px rgba(200,169,81,0.4));
+    animation: hexPulse 3s ease-in-out infinite;
+  }
+
+  .cta-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 900;
+    color: var(--warm-white);
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  .cta-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 56px;
+  }
+
+  .contract-block {
+    background: rgba(200, 169, 81, 0.06);
+    border: 1px solid var(--border);
+    padding: 32px 40px;
+    margin: 0 auto 40px;
+    max-width: 600px;
+  }
+
+  .contract-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .contract-address {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(13px, 1.8vw, 16px);
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    word-break: break-all;
+    line-height: 1.6;
+  }
+
+  .contract-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    letter-spacing: 0.1em;
+  }
+
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  .copy-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 32px;
+    text-align: center;
+  }
+
+  .footer-symbol {
+    font-size: 32px;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: block;
+    opacity: 0.6;
+  }
+
+  .footer-tagline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+
+  .footer-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes hexPulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(200,169,81,0.3)); }
+    50% { filter: drop-shadow(0 0 50px rgba(200,169,81,0.6)); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    section { padding: 60px 20px; }
+    .indictment { padding: 32px 24px; }
+    .contract-block { padding: 24px 20px; }
+    .record-item { grid-template-columns: 60px 1fr; gap: 16px; }
+  }
+
+  /* ── SELECTION ── */
+  ::selection {
+    background: rgba(200, 169, 81, 0.3);
+    color: var(--warm-white);
+  }
+</style>
+
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+
+<section class="hero" style="max-width:none; border-bottom: 1px solid var(--border); padding: 60px 24px;">
+
+  <!-- Hex background -->
+
+  <div class="hex-grid" aria-hidden="true">
+    ⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡⬡
+  </div>
+
+  <div class="hero-inner">
+    <p class="hero-eyebrow">$COMMON — [T+0]</p>
+
+```
+<div class="hero-symbol" aria-hidden="true">⬡</div>
+
+<h1 class="hero-headline">
+  This belongs<br>to <em>all of us.</em>
+</h1>
+
+<p class="hero-sub">
+  The system wasn't broken by accident.<br>
+  It was designed this way.<br>
+  And the people it was designed against<br>just figured out how to use the same tools.
+</p>
+
+<div class="hero-scroll">
+  <div class="scroll-line"></div>
+  <span>Read slowly</span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     THE INDICTMENT
+══════════════════════════════════════════════ -->
+
+<section>
+  <p class="section-label">The Record</p>
+  <div class="indictment">
+    <p class="indictment-line">The banks got bailed out. <span>You got a bill.</span></p>
+    <p class="indictment-line">The politicians traded stocks on the day <span>they wrote the laws.</span></p>
+    <p class="indictment-line">The institutions asked for your trust <span>and used it to tilt the table.</span></p>
+    <p class="indictment-line">This has been happening for a long time. <span>Most people already know.</span></p>
+    <p class="indictment-line">Most people felt like there was <span>nothing they could do.</span></p>
+    <p class="indictment-line" style="margin-top: 32px; font-size: clamp(22px, 3.5vw, 32px); font-weight: 700;">There is something <span>you can do.</span></p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     HEX DIVIDER
+══════════════════════════════════════════════ -->
+
+<div class="hex-divider" aria-hidden="true">⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡</div>
+
+<!-- ══════════════════════════════════════════════
+     WHAT $COMMON IS
+══════════════════════════════════════════════ -->
+
+<section class="manifesto">
+  <p class="section-label">What This Is</p>
+
+  <p>Not a protest. Not a party. Not a petition that gets filed and forgotten.</p>
+
+  <p>A <strong>coordinate.</strong> A place where people who are done waiting for permission put their weight together and see what moves.</p>
+
+  <div class="pull-quote">
+    "The commons used to be land that <em>belonged to everyone.</em> Then it was enclosed. Privatized. Optimized. Monetized. Access sold back to the people it was taken from."
+  </div>
+
+  <p>$COMMON is the commons they forgot to enclose.</p>
+
+  <p>Every hexagon in a honeycomb is ordinary. <strong>No single cell is load-bearing.</strong> Together they hold everything. The most efficient structure in nature isn't built from strength. It's built from coordination.</p>
+
+  <p>That's what we are. <em>That's what this is.</em></p>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     HEX DIVIDER
+══════════════════════════════════════════════ -->
+
+<div class="hex-divider" aria-hidden="true">⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡</div>
+
+<!-- ══════════════════════════════════════════════
+     WHO THIS IS FOR
+══════════════════════════════════════════════ -->
+
+<section>
+  <p class="section-label">Who This Is For</p>
+  <div class="for-grid">
+
+```
+<div class="for-item">
+  <div class="for-hex">⬡</div>
+  <div class="for-text">
+    <strong>If you voted and felt lied to —</strong>
+    This is for you.
+  </div>
+</div>
+
+<div class="for-item">
+  <div class="for-hex">⬡</div>
+  <div class="for-text">
+    <strong>If you didn't vote because both options felt like the same option —</strong>
+    This is for you.
+  </div>
+</div>
+
+<div class="for-item">
+  <div class="for-hex">⬡</div>
+  <div class="for-text">
+    <strong>If you watched the bailout and didn't get one —</strong>
+    This is for you.
+  </div>
+</div>
+
+<div class="for-item">
+  <div class="for-hex">⬡</div>
+  <div class="for-text">
+    <strong>If you're tired of being told to trust institutions that have given you every reason not to —</strong>
+    This is for you.
+  </div>
+</div>
+
+<div class="for-item">
+  <div class="for-hex">⬡</div>
+  <div class="for-text">
+    <strong>If you believe the people, organized and committed, are more powerful than the tilt —</strong>
+    This is especially for you.
+  </div>
+</div>
+
+<div class="for-item" style="padding-top: 40px;">
+  <div class="for-hex" style="color: var(--warm-white);">—</div>
+  <div class="for-text" style="color: var(--warm-white); font-size: clamp(17px, 2.2vw, 21px);">
+    $COMMON is not left. $COMMON is not right. $COMMON is not center.<br><br>
+    <em style="color: var(--gold);">$COMMON is the direction they removed from the map.</em>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     HEX DIVIDER
+══════════════════════════════════════════════ -->
+
+<div class="hex-divider" aria-hidden="true">⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡ ⬡</div>
+
+<!-- ══════════════════════════════════════════════
+     THE LORE / RECORD
+══════════════════════════════════════════════ -->
+
+<section>
+  <p class="section-label">The Record</p>
+  <ul class="record-list">
+
+```
+<li class="record-item">
+  <div class="record-timestamp">[T+0]</div>
+  <div class="record-text">Someone noticed the shape of the tilt before anyone had a word for it.</div>
+</li>
+
+<li class="record-item">
+  <div class="record-timestamp">[T+1]</div>
+  <div class="record-text">$COMMON was the word.</div>
+</li>
+
+<li class="record-item">
+  <div class="record-timestamp">[T+2]</div>
+  <div class="record-text">The commons formed. Not because anyone asked it to. Because it was time.</div>
+</li>
+
+<li class="record-item">
+  <div class="record-timestamp">[T+3]</div>
+  <div class="record-text">You found this page.</div>
+</li>
+
+<li class="record-item">
+  <div class="record-timestamp">[T+?]</div>
+  <div class="record-text"><em>Unknown. That's where you come in.</em></div>
+</li>
+```
+
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SIGNAL LOG
+══════════════════════════════════════════════ -->
+
+<section>
+  <p class="section-label">Signal Log — Unverified. Unsigned. Unsponsored.</p>
+  <div class="signal-log">
+
+```
+<div class="signal-entry">
+  "sent this to everyone i know who's been rugged. none of them replied right away. all of them bought."
+  <span class="signal-anon">— anon ⬡ unverified</span>
+</div>
+
+<div class="signal-entry">
+  "first thing in crypto that didn't feel like it was selling me something. which made me want to buy it immediately. make that make sense."
+  <span class="signal-anon">— anon ⬡ unverified</span>
+</div>
+
+<div class="signal-entry">
+  "⬡ is in my bio now. two people asked what it means. i sent them the link. neither of them asked a follow-up question."
+  <span class="signal-anon">— anon ⬡ unverified</span>
+</div>
+
+<div class="signal-entry">
+  "i've been rugged. i've been lied to by people with roadmaps and team photos. $COMMON has neither. that's why i'm here."
+  <span class="signal-anon">— anon ⬡ unverified</span>
+</div>
+
+<div class="signal-entry">
+  "the commons moves together. i hadn't heard that phrase before. i've thought about it every day since."
+  <span class="signal-anon">— anon ⬡ unverified</span>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FAQ
+══════════════════════════════════════════════ -->
+
+<section>
+  <p class="section-label">Questions</p>
+  <ul class="faq-list">
+
+```
+<li class="faq-item">
+  <p class="faq-q">What is $COMMON?</p>
+  <p class="faq-a"><strong>The correction.</strong> The organized response to a system that was designed to move without you. The commons, reformed.</p>
+</li>
+
+<li class="faq-item">
+  <p class="faq-q">Who made this?</p>
+  <p class="faq-a">Someone who understood that the answer isn't the person. The commons doesn't have a founder. <strong>It has participants.</strong></p>
+</li>
+
+<li class="faq-item">
+  <p class="faq-q">Is this left or right?</p>
+  <p class="faq-a">The tilt doesn't pick sides. <strong>Neither do we.</strong> If you've felt the tilt, you're in the right place regardless of who you voted for.</p>
+</li>
+
+<li class="faq-item">
+  <p class="faq-q">Is there a roadmap?</p>
+  <p class="faq-a">The roadmap is what happens when the commons moves together. <strong>We have a strong hypothesis about what that looks like.</strong> We'd rather show you than tell you.</p>
+</li>
+
+<li class="faq-item">
+  <p class="faq-q">What's the signal?</p>
+  <p class="faq-a">If you read this far — <strong>you already found it.</strong></p>
+</li>
+
+<li class="faq-item">
+  <p class="faq-q">Is this a protest?</p>
+  <p class="faq-a">Protests ask for permission. <strong>This doesn't ask for anything.</strong> It coordinates. There's a difference.</p>
+</li>
+
+<li class="faq-item">
+  <p class="faq-q">Why should I trust this?</p>
+  <p class="faq-a">You shouldn't trust anything on instinct alone. <strong>Read carefully. Verify on-chain. Decide.</strong> Those aren't the same as trust — they're better.</p>
+</li>
+```
+
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CTA
+══════════════════════════════════════════════ -->
+
+<div class="cta-section">
+  <div class="cta-symbol" aria-hidden="true">⬡</div>
+
+  <h2 class="cta-headline">Hold the common ground.</h2>
+  <p class="cta-sub">No team photo. No roadmap. No permission needed.</p>
+
+  <div class="contract-block">
+    <p class="contract-label">Contract Address</p>
+    <p class="contract-address" id="ca">[ TO BE ANNOUNCED — CHECK BACK AT T+LAUNCH ]</p>
+    <p class="contract-note">Verify independently. Always.</p>
+  </div>
+
+<button class="copy-btn" onclick="copyCA()">Copy Address</button>
+
+</div>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+
+<footer>
+  <span class="footer-symbol">⬡</span>
+  <p class="footer-tagline">"This belongs to all of us."</p>
+  <p class="footer-meta">$COMMON &nbsp;·&nbsp; [T+0] &nbsp;·&nbsp; The commons formed.</p>
+</footer>
+
+<!-- ══════════════════════════════════════════════
+     JS — SCROLL REVEALS + COPY
+══════════════════════════════════════════════ -->
+
+<script>
+  // Scroll-triggered reveals
+  const revealEls = document.querySelectorAll(
+    '.indictment-line, .manifesto p, .pull-quote, .for-item, .record-item, .faq-item, .signal-entry'
+  );
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // stagger siblings
+        const siblings = [...entry.target.parentElement.children];
+        const idx = siblings.indexOf(entry.target);
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, idx * 120);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // Copy CA
+  function copyCA() {
+    const ca = document.getElementById('ca').textContent;
+    navigator.clipboard.writeText(ca).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied ⬡';
+      setTimeout(() => btn.textContent = 'Copy Address', 2000);
+    });
+  }
+
+  // Subtle hex cursor trail (desktop only)
+  if (window.innerWidth > 768) {
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.97) {
+        const hex = document.createElement('div');
+        hex.textContent = '⬡';
+        hex.style.cssText = `
+          position: fixed;
+          left: ${e.clientX - 8}px;
+          top: ${e.clientY - 8}px;
+          color: rgba(200,169,81,0.4);
+          font-size: 14px;
+          pointer-events: none;
+          z-index: 999;
+          transition: opacity 1s ease, transform 1s ease;
+          user-select: none;
+        `;
+        document.body.appendChild(hex);
+        requestAnimationFrame(() => {
+          hex.style.opacity = '0';
+          hex.style.transform = 'translateY(-20px)';
+        });
+        setTimeout(() => hex.remove(), 1000);
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
